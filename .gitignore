@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build folders
+bin/
+obj/
+
+# Visual Studio generated files
+*.userprefs
+
+# Debug files
+*.pdb
+
+# Temporary files
+*.tmp
+*.log

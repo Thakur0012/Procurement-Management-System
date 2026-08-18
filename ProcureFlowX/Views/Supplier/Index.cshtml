@@ -1,0 +1,53 @@
+@model IEnumerable<ProcureFlowX.Models.SupplierModel>
+@{
+    ViewBag.Title = "Suppliers";
+}
+
+<h2 class="text-center">Supplier Management</h2>
+
+<div class="mb-3">
+    <a href="@Url.Action("Create")" class="btn btn-success">+ Add Supplier</a>
+    <input type="text" id="searchBox" class="form-control mt-2" placeholder="Search Supplier Name..." />
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th width="220">Action</th>
+        </tr>
+    </thead>
+    <tbody id="supplierTable">
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.SupplierName</td>
+                <td>@s.ContactNumber</td>
+                <td>@s.EmailAddress</td>
+                <td>
+                    @(s.IsActive ? "Active" : "Inactive")
+                </td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = s.SupplierId })" class="btn btn-info btn-sm">Details</a>
+                    <a href="@Url.Action("Edit", new { id = s.SupplierId })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = s.SupplierId })"
+                       onclick="return confirm('Are you sure?')"
+                       class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.getElementById("searchBox").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#supplierTable tr");
+        rows.forEach(r => {
+            r.style.display = r.innerText.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+</script>

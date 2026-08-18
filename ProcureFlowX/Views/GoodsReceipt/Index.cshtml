@@ -1,0 +1,76 @@
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "GoodsReceipt";
+}
+
+<h2 class="text-center">Goods Receipt List</h2>
+
+<div class="mb-3">
+    <a href="@Url.Action("Create")" class="btn btn-success mb-3">
+        Create Purchase
+    </a>
+
+    <input type="text"
+           id="searchBox"
+           class="form-control mt-2"
+           placeholder="Search Purchase Order Name..." />
+</div>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Order No</th>
+            <th>Supplier</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody id="GoodsReceiptTable">
+        @foreach (System.Data.DataRow r in Model.Rows)
+        {
+            <tr>
+                <td>@r["GRNId"]</td>
+
+                <td>@r["SupplierName"]</td>
+
+                <td>
+                    @Convert.ToDateTime(r["GRNDate"]).ToString("dd-MMM-yyyy")
+                </td>
+
+                <td>@r["GRNStatus"]</td>
+
+                <td>
+                    <a href="@Url.Action("Details", new { id = r["GRNId"] })"
+                       class="btn btn-info btn-sm">
+                        Details
+                    </a>
+
+                    <a href="@Url.Action("Edit", new { id = r["GRNId"] })"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a href="@Url.Action("Delete", new { id = r["GRNId"] })"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this purchase order?');">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.getElementById("searchBox").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#GoodsReceiptTable tr");
+
+        rows.forEach(function (row) {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+</script>

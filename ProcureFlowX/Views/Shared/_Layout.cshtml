@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - ProcureFlowX</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- TOP NAV BAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")">
+                ProcureFlowX
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Home")">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Supplier")">
+                            Supplier Master
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Product")">
+                            Product Master
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","GoodsReceipt")">
+                            Purchase Order
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BODY -->
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

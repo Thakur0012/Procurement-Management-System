@@ -1,0 +1,229 @@
+﻿@model ProcureFlowX.Models.GoodsReceiptModel
+
+<h2 class="text-center mb-3">Create Purchase Order</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="card p-4">
+
+        <!-- SUPPLIER SELECTION -->
+        <div class="mb-3">
+            <label class="form-label">Supplier</label>
+            @Html.DropDownListFor(m => m.SupplierId,
+                (SelectList)ViewBag.SupplierList,
+                "-- Select Supplier --",
+                new { @class = "form-control", id = "supplier", required = "required" })
+        </div>
+
+        <!-- PRODUCT SELECTION -->
+        <div class="mb-3">
+            <label class="form-label">Product</label>
+            <select id="product" class="form-control">
+                <option value="">-- Select Product --</option>
+            </select>
+        </div>
+
+        <!-- GRN DATE -->
+        <div class="mb-3">
+            <label class="form-label">Order Date</label>
+            @Html.TextBoxFor(m => m.GRNDate,
+                new
+                {
+                    @class = "form-control",
+                    type = "date",
+                    required = "required",
+                    id = "grnDate"   // ✅ ADDED ID
+                })
+        </div>
+
+        <!-- AVAILABLE STOCK -->
+        <div class="mb-3">
+            <label class="form-label">Available Stock</label>
+            <input type="text" id="stock" class="form-control" readonly />
+        </div>
+
+        <!-- QUANTITY -->
+        <div class="mb-3">
+            <label class="form-label">Order Quantity</label>
+            <input type="number" id="qty" class="form-control" min="1" />
+        </div>
+
+        <!-- ADD ITEM BUTTON -->
+        <button type="button" id="addItem" class="btn btn-info mb-3">
+            + Add Item
+        </button>
+
+        <!-- ITEM GRID -->
+        <table class="table table-bordered" id="itemTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th width="80">Remove</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- SUBMIT -->
+        <button type="submit" id="submitBtn" class="btn btn-success">
+            Create Purchase Order
+        </button><br />
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var rowIndex = 0;
+
+        // Load products when supplier changes
+        $("#supplier").change(function () {
+
+            var supplierId = $(this).val();
+
+            $("#product").empty().append("<option value=''>-- Select Product --</option>");
+            $("#stock").val("");
+
+            if (supplierId === "") return;
+
+            $.ajax({
+                url: '/GoodsReceipt/LoadProducts',
+                type: 'GET',
+                data: { supplierId: supplierId },
+                success: function (data) {
+
+                    if (data.length === 0) {
+                        alert("No active products found for this supplier.");
+                    }
+
+                    $.each(data, function (i, p) {
+                        $("#product").append(
+                            `<option value="${p.ProductId}" data-stock="${p.StockQty}" data-rate="${p.UnitPrice}">
+                                ${p.ProductName}
+                            </option>`
+                        );
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert("AJAX Error: " + status + " - " + error);
+                }
+            });
+        });
+
+        // Show stock when product changes
+        $("#product").change(function () {
+            var stock = $(this).find(":selected").data("stock");
+            $("#stock").val(stock || "");
+        });
+
+        // Add item to grid
+        $("#addItem").click(function () {
+
+            // ✅ NEW VALIDATIONS
+            if ($("#supplier").val() === "") {
+                alert("Please select a supplier.");
+                return;
+            }
+
+            if (!$("#grnDate").val()) {
+                alert("Please select order date.");
+                return;
+            }
+
+            var product = $("#product option:selected");
+            var qty = parseInt($("#qty").val());
+
+            if (!product.val()) {
+                alert("Please select a product.");
+                return;
+            }
+
+            if (!qty || qty <= 0) {
+                alert("Please enter valid quantity.");
+                return;
+            }
+
+            var stock = parseInt(product.data("stock"));
+            var rate = parseFloat(product.data("rate"));
+            var total = qty * rate;
+
+            if (qty > stock) {
+                alert("Quantity cannot exceed available stock.");
+                return;
+            }
+
+            var row = `
+                <tr>
+                    <td>${product.text()}</td>
+                    <td>${qty}</td>
+                    <td>${total.toFixed(2)}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove">X</button>
+                    </td>
+                </tr>`;
+
+            $("#itemTable tbody").append(row);
+
+            $("<input>").attr({
+                type: "hidden",
+                name: `Items[${rowIndex}].ProductId`,
+                value: product.val()
+            }).appendTo("form");
+
+            $("<input>").attr({
+                type: "hidden",
+                name: `Items[${rowIndex}].ReceivedQty`,
+                value: qty
+            }).appendTo("form");
+
+            $("<input>").attr({
+                type: "hidden",
+                name: `Items[${rowIndex}].UnitRate`,
+                value: total
+            }).appendTo("form");
+
+            rowIndex++;
+
+            $("#qty").val("");
+        });
+
+        // Remove item
+        $(document).on("click", ".remove", function () {
+            var row = $(this).closest("tr");
+            var index = row.index();
+
+            $(`input[name^='Items[${index}]']`).remove();
+            row.remove();
+        });
+
+        // ✅ FINAL SUBMIT VALIDATION
+        $("form").submit(function (e) {
+
+            if ($("#supplier").val() === "") {
+                alert("Supplier is mandatory.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!$("#grnDate").val()) {
+                alert("Order date is mandatory.");
+                e.preventDefault();
+                return;
+            }
+
+            if ($("#itemTable tbody tr").length === 0) {
+                alert("Please add at least one product item.");
+                e.preventDefault();
+                return;
+            }
+        });
+
+    });
+</script>

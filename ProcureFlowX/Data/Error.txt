@@ -1,0 +1,44 @@
+--------------------------------------------------
+Date: 4/7/2026 3:58:43 PM
+Error: Details not found for GRN ID: 4
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/7/2026 3:58:47 PM
+Error: Edit not found for GRN ID: 4
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/7/2026 4:33:22 PM
+Error: Details not found for GRN ID: 6
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/10/2026 9:23:54 AM
+Error: Details not found for GRN ID: 8
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/18/2026 9:54:59 AM
+Error: Details not found for GRN ID: 10
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:25:29 AM
+Error: DAL GetAll Suppliers Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:25:30 AM
+Error: Index Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:28:36 AM
+Error: DAL GetAll Suppliers Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:28:36 AM
+Error: Index Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:29:27 AM
+Error: DAL GetAll Products Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+--------------------------------------------------
+--------------------------------------------------
+Date: 4/24/2026 11:29:27 AM
+Error: Index Error: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+--------------------------------------------------

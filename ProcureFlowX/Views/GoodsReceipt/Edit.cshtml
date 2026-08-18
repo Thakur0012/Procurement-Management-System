@@ -1,0 +1,52 @@
+@model ProcureFlowX.Models.GoodsReceiptModel
+@{
+    ViewBag.Title = "Edit GRN";
+}
+
+<h2>Edit Goods Receipt</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="card p-4">
+
+        <!-- Hidden field for GRNId -->
+        @Html.HiddenFor(m => m.GRNId)
+
+        <!-- Supplier info (readonly) -->
+        <div class="mb-3">
+            <label>Supplier</label>
+            <input type="text" class="form-control"
+                   value="@Model.SupplierName" readonly />
+        </div>
+
+        <!-- GRN Date -->
+        <div class="mb-3">
+            <label>GRN Date</label>
+            <input type="date"
+                   name="GRNDate"
+                   value="@Model.GRNDate.ToString("yyyy-MM-dd")"
+                   class="form-control"
+                   required />
+        </div>
+
+        <!-- GRN Status -->
+        <div class="mb-3">
+            <label>Status</label>
+            <select name="GRNStatus" class="form-control">
+                <option value="Pending" @(Model.GRNStatus == "Pending" ? "selected" : "")>
+                    Pending
+                </option>
+                <option value="Completed" @(Model.GRNStatus == "Completed" ? "selected" : "")>
+                    Completed
+                </option>
+                <option value="Cancelled" @(Model.GRNStatus == "Cancelled" ? "selected" : "")>
+                    Cancelled
+                </option>
+            </select>
+        </div>
+
+        <!-- Submit and Back -->
+        <button class="btn btn-primary">Update</button><br />
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
+    </div>
+}

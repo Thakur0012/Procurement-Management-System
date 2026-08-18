@@ -1,0 +1,37 @@
+@model ProcureFlowX.Models.ProductModel
+
+<h2>Edit Product</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ProductId)
+
+    <div class="card p-4">
+
+        <label>Supplier</label>
+        @Html.DropDownListFor(m => m.SupplierId,
+            (SelectList)ViewBag.SupplierList,
+            new { @class = "form-control" })
+
+        <label class="mt-2">Product Name</label>
+        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+
+        <label class="mt-2">Unit Price</label>
+        @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+
+        <label class="mt-2">Quantity</label>
+        @Html.TextBoxFor(m => m.StockQty, new { @class = "form-control" })
+
+        <label class="mt-2">Status</label>
+        @Html.DropDownListFor(m => m.IsActive,
+            new SelectList(new[] {
+                new {Value=true, Text="Active"},
+                new {Value=false, Text="Inactive"}
+            }, "Value", "Text"),
+            new { @class = "form-control" })
+
+        <br />
+        <button class="btn btn-primary">Update</button><br />
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
+    </div>
+}

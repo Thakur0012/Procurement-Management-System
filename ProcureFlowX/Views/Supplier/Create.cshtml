@@ -1,0 +1,57 @@
+@model ProcureFlowX.Models.SupplierModel
+@{
+    ViewBag.Title = "Create Supplier";
+}
+
+<h2>Add Supplier</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="card p-4">
+
+        <div class="mb-3">
+            <label>Name</label>
+            @Html.TextBoxFor(m => m.SupplierName, new
+            {
+                @class = "form-control",
+                maxlength = "25",
+                required = "required"
+            })
+        </div>
+
+        <div class="mb-3">
+            <label>Contact Number</label>
+            @Html.TextBoxFor(m => m.ContactNumber, new
+            {
+                @class = "form-control",
+                maxlength = "10",
+                pattern = "[0-9]{10}",
+                required = "required"
+            })
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            @Html.TextBoxFor(m => m.EmailAddress, new
+            {
+                @class = "form-control",
+                maxlength = "25",
+                type = "email",
+                required = "required"
+            })
+        </div>
+
+        <div class="mb-3">
+            <label>Address</label>
+            @Html.TextBoxFor(m => m.SupplierAddress, new
+            {
+                @class = "form-control",
+                maxlength = "30",
+                required = "required"
+            })
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button><br />
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
+    </div>
+}

@@ -1,0 +1,187 @@
+﻿@model ProcureFlowX.Models.SupplierModel
+@{
+    ViewBag.Title = "Supplier Details";
+}
+
+<h2>Supplier Details</h2>
+
+<div class="card p-4">
+    <p><strong>Name:</strong> @Model.SupplierName</p>
+    <p><strong>Contact:</strong> @Model.ContactNumber</p>
+    <p><strong>Email:</strong> @Model.EmailAddress</p>
+    <p><strong>Address:</strong> @Model.SupplierAddress</p>
+    <p><strong>Status:</strong> @(Model.IsActive ? "Active" : "Inactive")</p>
+
+    <a href="@Url.Action("Edit", new { id = Model.SupplierId })" class="btn btn-warning">Edit</a><br />
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
+</div>
+
+<hr />
+
+<div class="card p-4 mt-4">
+    <h4>Sales Analytics</h4>
+
+    <!-- BALANCED CONTROLS -->
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+        <div style="flex:1;">
+            <label><strong>Filter Type</strong></label>
+            <select id="filterType" class="form-control">
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+        </div>
+
+        <div style="flex:1;">
+            <label><strong>Search Product</strong></label>
+            <input type="text" id="searchBox" class="form-control"
+                   placeholder="Search product..." />
+        </div>
+
+        <div style="flex:1;">
+            <label><strong>Select Product</strong></label>
+            <select id="productFilter" class="form-control">
+                <option value="ALL">-- Select Product --</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div style="display:flex; justify-content:space-around; flex-wrap:wrap; margin-top:25px;">
+
+        <div style="width:45%; height:300px;">
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <div style="width:35%; height:250px;">
+            <canvas id="pieChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Total Sold</th>
+            </tr>
+        </thead>
+        <tbody id="salesTable"></tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var supplierId = @Model.SupplierId;
+    var barChartInstance = null;
+    var pieChartInstance = null;
+    var fullData = [];
+
+    function populateProductFilter(data) {
+        let dropdown = document.getElementById("productFilter");
+        dropdown.innerHTML = `<option value="ALL">-- Select Product --</option>`;
+
+        data.forEach(x => {
+            dropdown.innerHTML += `<option value="${x.ProductName}">${x.ProductName}</option>`;
+        });
+    }
+
+    function renderCharts(data) {
+
+        let labels = data.map(x => x.ProductName);
+        let values = data.map(x => x.TotalQty);
+
+        // AUTO SCALE LOGIC 🔥
+        let maxValue = Math.max(...values, 10); // minimum 10
+        let suggestedMax = Math.ceil(maxValue * 1.2); // add 20% padding
+
+        // TABLE
+        let table = "";
+        data.forEach(x => {
+            table += `<tr><td>${x.ProductName}</td><td>${x.TotalQty}</td></tr>`;
+        });
+        document.getElementById("salesTable").innerHTML = table;
+
+        if (barChartInstance) barChartInstance.destroy();
+        if (pieChartInstance) pieChartInstance.destroy();
+
+        // BAR CHART
+        barChartInstance = new Chart(document.getElementById("barChart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales Quantity',
+                    data: values
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: suggestedMax
+                    }
+                }
+            }
+        });
+
+        // PIE CHART
+        pieChartInstance = new Chart(document.getElementById("pieChart"), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+    function loadChart(type) {
+        fetch(`/Supplier/GetSalesData?id=${supplierId}&type=${type}`)
+            .then(res => res.json())
+            .then(data => {
+                fullData = data;
+                populateProductFilter(data);
+                renderCharts(data);
+            });
+    }
+
+    // DROPDOWN FILTER
+    document.getElementById("productFilter").addEventListener("change", function () {
+        let selected = this.value;
+
+        if (selected === "ALL") {
+            renderCharts(fullData);
+        } else {
+            let filtered = fullData.filter(x => x.ProductName === selected);
+            renderCharts(filtered);
+        }
+    });
+
+    // SEARCH FILTER
+    document.getElementById("searchBox").addEventListener("input", function () {
+        let keyword = this.value.toLowerCase();
+
+        let filtered = fullData.filter(x =>
+            x.ProductName.toLowerCase().includes(keyword)
+        );
+
+        renderCharts(filtered);
+    });
+
+    document.getElementById("filterType").addEventListener("change", function () {
+        loadChart(this.value);
+    });
+
+    loadChart("Monthly");
+</script>

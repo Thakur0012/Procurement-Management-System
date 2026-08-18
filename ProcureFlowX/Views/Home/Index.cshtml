@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<h2 class="text-center mb-4">Purchase Order Management System</h2>
+
+<div class="row text-center">
+
+    <!-- SUPPLIER MASTER -->
+    <div class="col-md-4">
+        <div class="card shadow p-4 mb-4">
+            <h4>Supplier Master</h4>
+            <p>Create and manage suppliers, contacts, status and their details.</p>
+            <a href="@Url.Action("Index","Supplier")"
+               class="btn btn-primary">
+                Open
+            </a>
+        </div>
+    </div>
+
+    <!-- ITEM MASTER -->
+    <div class="col-md-4">
+        <div class="card shadow p-4 mb-4">
+            <h4>Item Master</h4>
+            <p>Create and manage items linked with suppliers and their details.</p>
+            <a href="@Url.Action("Index","Product")"
+               class="btn btn-primary">
+                Open
+            </a>
+        </div>
+    </div>
+
+    <!-- PURCHASE ORDER -->
+    <div class="col-md-4">
+        <div class="card shadow p-4 mb-4">
+            <h4>Purchase Orders</h4>
+            <p>Create purchase orders of items linked with suppliers.</p>
+            <a href="@Url.Action("Index","GoodsReceipt")"
+               class="btn btn-primary">
+                Open
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+
+<div class="text-center mt-3">
+    <small class="text-muted">
+        ProcureFlowX © @DateTime.Now.Year
+    </small>
+</div>
