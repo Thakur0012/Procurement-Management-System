@@ -309,8 +309,8 @@ Example:
 
 ```xml
 <connectionStrings>
-  <add name="PRACTICE"
-       connectionString="Data Source=.;Initial Catalog=ProcureFlowX;Integrated Security=True"
+  <add name="Your Database Name"
+       connectionString="Your connection String"
        providerName="System.Data.SqlClient" />
 </connectionStrings>
 ```
